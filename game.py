@@ -24,9 +24,12 @@ class Game:
             if self.dealer.hand.busted() or playerHand > dealerHand:
                 print("player wins!")
                 # call betting module... player wins money
-        elif playerHand == dealerHand:
-            print("it's a tie... PUSH")
-            # call betting module... player doesn't win or lose money
+            elif playerHand == dealerHand:
+                print("it's a tie... PUSH")
+                # call betting module... player doesn't win or lose money
+            else:
+                print("dealer wins")
+                # call betting module... player loses money
         else:
             print("dealer wins")
             # call betting module... player loses money
