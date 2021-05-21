@@ -1,36 +1,14 @@
-from const import *
-from cards import Card
-
-
+from deck import Card
+from typing import Dict
 
 class CardCount:
-    def __init__(self) -> None:
-        self.count = 0
-        #self.card_values = {}
-    def count(self):
-        raise "Undefined Function"
+    def __init__(self, values: Dict[str, int]) -> None:
+        self.rCount = 0
+        self.tCount = 0
+        self.values = values
 
-class HiLow(CardCount):
-    def __init__(self) -> None:
-        super().__init__()
-        self.card_values = {
-            "Ace": -1, 
-            "2": 1, 
-            "3": 1, 
-            "4": 1, 
-            "5": 1, 
-            "6": 1, 
-            "7": 0, 
-            "8": 0, 
-            "9": 0, 
-            "10": -1, 
-            "Jack": -1, 
-            "Queen": -1, 
-            "King": -1
-            }
+    def runningCount(self, card: Card):
+        self.rCount += self.values[card.rank]
 
-    def count(self, card: Card):
-        self.count += self.card_values[card.rank]
-
-
-    
+    def trueCount(self, number_of_decks: float):
+        self.tCount = self.rCount/number_of_decks
