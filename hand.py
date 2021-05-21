@@ -1,5 +1,5 @@
 from typing import List
-from deck import Card
+from card import Card
 
 class Hand:
     # betting data should be stored in the hand

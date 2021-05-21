@@ -1,4 +1,4 @@
-from deck import Card
+from card import Card
 from typing import Dict
 
 class CardCount:
