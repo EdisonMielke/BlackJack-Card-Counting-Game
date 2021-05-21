@@ -20,9 +20,10 @@ class Game:
     def compare(self):
         playerHand = self.player.hand.getValue()
         dealerHand = self.dealer.hand.getValue()
-        if not self.player.hand.busted() and playerHand > dealerHand:
-            print("player wins!")
-            # call betting module... player wins money
+        if not self.player.hand.busted():
+            if self.dealer.hand.busted() or playerHand > dealerHand:
+                print("player wins!")
+                # call betting module... player wins money
         elif playerHand == dealerHand:
             print("it's a tie... PUSH")
             # call betting module... player doesn't win or lose money
@@ -31,8 +32,6 @@ class Game:
             # call betting module... player loses money
         print(f"player = {self.player.hand} = {playerHand}")
         print(f"dealer = {self.dealer.hand} = {dealerHand}")
-
-
 
 
 def main():
