@@ -13,4 +13,4 @@ class Card:
         return f"{self.rank} of {self.suit}"
 
     def __eq__(self, other: "Card") -> bool:
-        return self.value == other.value
+        return self.rank == other.rank

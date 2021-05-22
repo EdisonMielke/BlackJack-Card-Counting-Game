@@ -1,39 +1,41 @@
 from typing import List
 from card import Card
+from deck import Deck
+
 
 class Hand:
     # betting data should be stored in the hand
-    def __init__(self, cards: List[Card]) -> None:
+    def __init__(self, cards: List[Card], flag = False) -> None:
         self.value = 0
         self.softAces = 0
+        self.hardAces = 0
         self.cards = cards
-        self.hasSplit = False
+        self.splitted = flag
 
     def addCard(self, card: Card):
+        if card.rank == "Ace":
+            self.softAces += 1
         self.cards.append(card)
 
-    #@property 
-    # def value(self):
     def getValue(self):# change function name to update value?
 
-        #self.value = 0
         self.value = sum(card.value for card in self.cards)
-        #for card in self.cards:
-            #self.value += card.value
 
-        # is while loop needed or will if statement work the same instead?
         while self.value > 21 and self.softAces:
-            self.value -= 10
+            #self.value -= 10
             self.softAces -= 1
-        
-        return self.value # is this return statement needed? if i just call this function in addCard then return isn't needed
+            self.hardAces += 1# there's gotta be a more efficient way of doing this
+
+        self.value -= self.hardAces*10
+        return self.value # is this return statement needed?
 
     def busted(self) -> bool:
         return self.getValue() > 21
-        #return self.value > 21 # see line 29 comment
+        #return self.value > 21
 
     def blackjack(self) -> bool:
-        return len(self.cards) == 2 and self.value == 21 and not self.hasSplit
+        return len(self.cards) == 2 and self.getValue() == 21 and not self.splitted
+        #return len(self.cards) == 2 and self.value == 21 and not self.splitFlag
 
     def doublable(self) -> bool:
         return len(self.cards) == 2 # and not self.blackjack()
@@ -44,8 +46,15 @@ class Hand:
     def surrenderable(self) -> bool:
         return len(self.cards) == 2 #and not self.blackjack()
 
+    def split(self):# change name?
+        self.splitted = True
+        #newHand = Hand([self.cards[1]], True)  is line does remove second card from hand becuz it doesn't pop
+        newHand = Hand([self.cards.pop()])
+        return newHand
+
     def __str__(self):
         ret = ""
         for card in self.cards:
             ret += f"{card}, "
         return ret
+

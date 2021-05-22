@@ -5,7 +5,7 @@ from card import Card
 
 
 class Deck:
-    def __init__(self, number_of_decks = 1) -> None:
+    def __init__(self, number_of_decks = 4) -> None:
         self.count = CardCount(HILOW_VALUES)
         self.number_of_decks = number_of_decks
         self.deck = [Card(rank, suit) for rank in RANKS for suit in SUITS]*number_of_decks
@@ -21,7 +21,8 @@ class Deck:
         random.shuffle(self.deck)
 
     def deal(self) -> Card:
-        # TODO: don't count dealer's downcard until the round is over
+        # TODO: don't count dealer's downcard until the round is over?
+        # update card count class with data. Move card count updates to different class?
         card = self.deck.pop()
         self.count.runningCount(card)
         number_of_cards = len(self.deck)
