@@ -1,6 +1,7 @@
 from deck import Deck
 from hand import Hand
 
+
 class Participant:
     def __init__(self) -> None:
     #def __init__(self) -> None:
@@ -20,7 +21,7 @@ class Participant:
 
     def hit(self, deck: Deck, ind = 0):
         # TODO: change to self.hands and fix index
-        #self.hand.addCard(deck.deal())**
+        #self.hand.addCard(deck.deal())
         self.hands[ind].addCard(deck.deal())
 
     def play(self, deck: Deck):
@@ -51,48 +52,56 @@ class Player(Participant):
 
 
     def play(self, hand: Hand, deck: Deck):
+        # TODO: use playing variable below?
         #playing = True
-        while not hand.blackjack() and not hand.busted():#and playing
+        while not hand.blackjack() and not hand.busted() and hand.getValue() != 21:#and playing
             print(f"{hand} value = {hand.getValue()}")
-            move = input("H - Hit, S - Stand, D - Double, P - Split, R - Surrender\n").lower()
-            if move == "h":
-                self.hit(hand, deck)
-            elif move == "s":
+            #print(f"softAces = {hand.softAces}")
+            move = input("H - Hit, S - Stand, D - Double, P - Split, R - Surrender\n").upper()
+            if move == "H":
+                if hand.hittable():
+                    self.hit(hand, deck)
+                else:
+                    # TODO: fix error message... and end this while loop if 21 is reached
+                    print("Can only hit or double once after splitting aces, and cannot hit when 21")
+            elif move == "S":
                 break
-            elif move == "d":
+            elif move == "D":
                 if hand.doublable():
                     self.hit(hand, deck)
                     break
                 else:
                     print("Cannot double after hitting")
-            elif move == "p":
+            elif move == "P":
                 if hand.splittable():
                     self.split(hand, deck)
                 else:
                     print("Cannot split a hand that's already been splitted, has more than two cards, or cards of different ranks")
-            elif move == "r":
+            elif move == "R":
                 if hand.surrenderable():
-                    # TODO: add surrender rule... idk what is is 
-                    # dealer auto-wins... i should probably add a surrender flag
+                    hand.surrender()
                     break
                 else:
                     # TODO: make a better error message
                     print("Cannot surrender when you have more than 2 cards in your hand or have already splitted")
-            elif move == "o":
+            elif move == "O":
                 print(f"running count = {deck.count.rCount}")
                 print(f"true count = {deck.count.tCount}")
                 deck.count.displayInfo()
             else:
                 print("Not a valid input/move command!")
 
-        # TODO: maybe call hand.getValue() at the end of the while loop?
+        # TODO: maybe call hand.getValue() at the end of the while loop? so other functions can just access it 
+        #       using the hand.value variable instead of calling hand.getValue() everytime
+        # TODO: is the if statement below needed? maybe just create a blackjack result class or something?
         if hand.splitted and hand.busted():
             print(f"player has busted with {hand} = {hand.getValue()}")
 
 
 
+    # TODO: moves this function into the hand class?
     def double(self):
-        # TODO:
+        # TODO: finish this function
         # if self.hand.doublable()
         # amount_betted *= 2
         # hit
@@ -101,35 +110,21 @@ class Player(Participant):
 
     
     def split(self, hand: Hand, deck: Deck):
-        #self.hands[0].cards.pop()
-        #self.hands.append(hand.split().addCard(deck.deal()))
+        # TODO: delete the Hand.split() function and just put it in here instead
         newHand = hand.split()
-        hand.addCard(deck.deal())
+        if newHand.cards[0].rank == "Ace":
+            hand.cards[0].value = newHand.cards[0].value = 11
+            hand.softAces = newHand.softAces = 1
+            hand.aceSplit = newHand.aceSplit = True
 
-        newHand.addCard(deck.deal())
         self.hands.append(newHand)
-    """
-    def split(self, deck: Deck):# change name?
-        # TODO:
-        # NOte: if a player splits aces they can only hit once for each hand... e.i. (ace, card1), (ace, card2)
-        #self.hand.splitFlag = True
-        #self.hand = Hand([[self.hand.cards[0]],[self.hand.cards[1]]])
-        card1 = self.hands[0].cards[0]
-        card2 = self.hands[0].cards[1]
-        aces = True if card1.rank == "Ace" else False
-        #self.hands = [Hand([self.hands[0].cards[0]], True), Hand([self.hands[0].cards[1]], True)]
-        if aces:
-            self.hands = [Hand([card1, deck.deal()], True), Hand([card2, deck.deal()], True)]
-        else:
-            self.hands = [Hand([card1], True), Hand([card2], True)]
-    """
 
 
 class Dealer(Participant):
     def __init__(self) -> None:
         super().__init__()
 
-    # change this because dealer can't split and therefore will only ever have one hand per round
+    # change this because dealer can't split and therefore will only ever have one hand per round?
     def play(self, deck: Deck):
         while self.hands[0].getValue() < 17:
             self.hit(deck)

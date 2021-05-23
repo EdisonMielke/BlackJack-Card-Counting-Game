@@ -2,6 +2,7 @@ from deck import Deck
 from hand import Hand
 from participant import Player, Dealer
 
+
 class Game:
     def __init__(self, number_of_decks = 4) -> None:
         self.deck = Deck(number_of_decks)
@@ -12,10 +13,10 @@ class Game:
         self.player.newHand(self.deck) # starting hand dealt to player
         self.dealer.newHand(self.deck) # starting hand dealt to dealer
         print(f"dealer upcard = {self.dealer.hands[0].cards[0]}\n") # show dealer's upcard
-        self.player.playHands(self.deck) # user's turn to play/bet
+        self.player.playHands(self.deck) # user's turn to play/bet all hands they have
 
         if not self.player.allBust(): 
-            self.dealer.play(self.deck) # dealer's turn to play if and only if user has not busted
+            self.dealer.play(self.deck) # dealer's turn to play if and only if user has not busted on all hands
 
         self.compareHands()
 
@@ -27,6 +28,7 @@ class Game:
         playerHand = hand.getValue()
         dealerHand = self.dealer.hands[0].getValue()
         # dealerHand = "Dealer Busts!" if dealerHand > 21 else dealerHand
+        # TODO: make better interface messages... use visualazation class too
         if not hand.busted():
             if self.dealer.hands[0].busted() or playerHand > dealerHand:
                 print("player wins!")
