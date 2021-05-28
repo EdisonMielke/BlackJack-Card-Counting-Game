@@ -22,11 +22,10 @@ class Hand:
                 self.softAces += 1
             self.aces.append(card)
         self.cards.append(card)
-        #print(f"(addCard func): softaces = {self.softAces}, hand = {self.cards}, value = {self.getValue()}\n")
     
 
     def getValue(self):
-        # TODO: getValue should be called whenever a new card is added to the hand. other function shouldn't call getvalue
+        # TODO: getValue should be called whenever a new card is added to the hand. other function shouldn't call getvalue?
         # but rather just use the self.value varible
         self.value = sum(card.value for card in self.cards)
 
@@ -58,14 +57,15 @@ class Hand:
     def surrenderable(self) -> bool:
         return len(self.cards) == 2 #and not self.blackjack() and self.getValue() < 21
 
-    def split(self):# change name?
+    """
+    def split(self):
         self.splitted = True
         newHand = Hand([self.cards.pop()], True)
         return newHand
+    """
 
     def __str__(self):
         ret = ""
         for card in self.cards:
             ret += f"{card}, "
         return ret
-

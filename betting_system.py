@@ -1,47 +1,52 @@
 class Betting:
     
-    def __init__(self, balance, bet):
-        
+    def __init__(self, balance: int):
         self.balance = balance
-        self.bet = bet
+        self.betsize = None
 
-        '''
-        self.balance = int(input("HOW MUCH CASH YOU GOT: "))
-        self.bet = int(input("HOW MUCH U TRYNA BET? "))
-        '''
+    def getBet(self):
+        while True:
+            try:
+                bet = int(input("Enter a bet size: "))
+                if self.validBet(bet):
+                    self.betsize = bet
+                    break
+                print("Error: Betsize not greater than zero, or betsize is too large for current balance!")
+            except ValueError:
+                print("not a valid bet")
 
-    def watyougot(self):
-        if(self.balance <= 0):
-            print("NOT ENOUGH MONEY TO BET")
-            return False
-        else:
-            print("Welcome to BLACKJACK casino!!")
-            return True
+
+        self.balance -= bet
+
+    def validBet(self, betsize: int) -> bool:
+        return betsize > 0 and self.balance - betsize >= 0
+
+
+    def split(self):
+        self.balance -= self.betsize
+
+    def double(self):
+        self.balance -= self.betsize
+        self.betsize *= 2
+
+
+    def validBalance(self) -> bool:
+        return self.validBet(self.betsize)
+
+    def won(self):
+        self.balance += self.betsize*2
+
+    def tie(self):
+        self.balance += self.betsize
+
+    def blackjack(self):
+        # NOTE: round to the nearest integer
+        self.balance += round(self.betsize*2.5)
+
+    # NOTE: def loss(self) is not needed becuz bet is already calculate in getBet, split, and double functions
+
         
-    def checkBalance(self):
-        return self.balance
-
-    def betting(self):
-        win = 1
-        print("CURRENT BALANCE:", self.balance)
-        if (self.bet > self.balance):
-            print("Don't have enougth money to bet")
-        else:
-            if(win):
-                print("W")
-                self.balance = self.balance + self.bet
-                print("Win:",self.bet,"$")
-            else:
-                print("L")
-                self.balance = self.balance - self.bet
-                print("Lost:",self.bet,"$")
 
     
         
-p1 = Betting(8, 5)
-p1.watyougot()
-p1.betting()
-print(p1.checkBalance())
-
-
 
