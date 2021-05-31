@@ -25,12 +25,17 @@ class Participant:
         self.hands[0].addCard(deck.deal())
 
 
+# This class manages the individual playing the game.
 class Player(Participant):
     def __init__(self, starting_balance: int, upcard = None) -> None:
         super().__init__()
         self.betting = Betting(starting_balance)
         self.dealers_upcard = upcard
 
+    """
+    This is needed because the dealer shouldn't add more cards to their
+    hand if they already know they won since the player busted.  
+    """
     def allBust(self) -> bool:
         for hand in self.hands:
             if not hand.busted():
@@ -53,13 +58,16 @@ class Player(Participant):
             self.display.showHand(hand, "Player")
             print(f"Player's Balance: ${self.betting.balance}\n")
 
-            move = input("H - Hit, S - Stand, D - Double, P - Split\n").lower()
-            if move == "r":
-                print(hand.getValue())
-                input("waiting for user")
-                continue
+            print("Hint Commands: B - Basic Strategy, C - Card Count")
+            print("Move Commands: H - Hit, S - Stand, D - Double, P - Split")
+            move = input().lower()
 
-            elif move == "h":
+            """
+            This if block tries to find the move the player entered and calls
+            the corresponding functions upon finding a move that matches the 
+            one entered by the player. 
+            """
+            if move == "h":
                 if hand.hittable():
                     self.hit(hand, deck)
                 else:
@@ -84,7 +92,9 @@ class Player(Participant):
                 else:
                     print("A hand can only be splitted if it contains only two cards of the same rank that haven't already been split.")
                     input("Press ENTER to continue...\n")
-            elif move == "o":
+            elif move == "c":
+                print(f"Running Count: {deck.count.rCount}")
+                print(f"True Count: {deck.count.tCount}")
                 deck.count.displayInfo()
                 input("Press ENTER to continue...\n")
             elif move == "b":
@@ -97,6 +107,7 @@ class Player(Participant):
         system("cls" if name == "nt" else "clear")
 
     
+    # Called if the player successfully chooses to split.
     def split(self, hand: Hand, deck: Deck):
         hand.splitted = True
         newHand = Hand([hand.cards.pop()], True)
@@ -108,7 +119,11 @@ class Player(Participant):
 
         self.hands.append(newHand)
 
-
+""" 
+This is the dealer class. According to the rules of blackjack, 
+the dealer will add cards to their hand until the value of their
+hand is greater than 16. 
+"""
 class Dealer(Participant):
     def __init__(self) -> None:
         super().__init__()

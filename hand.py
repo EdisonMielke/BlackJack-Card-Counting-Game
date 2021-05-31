@@ -16,6 +16,7 @@ class Hand:
         self.aceSplit = aceSplit
 
 
+    # Called when a card is requested to be added to the hand.
     def addCard(self, card: Card):
         if card.rank == "Ace":
             if card.value == 11:
@@ -24,6 +25,7 @@ class Hand:
         self.cards.append(card)
     
 
+    # Calculates the value of the hand and accounts for aces.
     def getValue(self):
         self.value = sum(card.value for card in self.cards)
 
@@ -37,24 +39,22 @@ class Hand:
                         break
         return self.value
 
-    def hittable(self):
+    # Checks if the hand can hit. 
+    def hittable(self) -> bool:
         return len(self.cards) == 1 and self.aceSplit or not self.aceSplit and self.getValue() < 21
 
+    # Checks if the hand has busted.
     def busted(self) -> bool:
         return self.getValue() > 21
 
+    # Checks if the hand is blackjack. Casinos usually don't let their players hit on 21.
     def blackjack(self) -> bool:
         return len(self.cards) == 2 and self.getValue() == 21 and not self.splitted
 
+    # Checks if the hand can be doubled
     def doublable(self) -> bool:
         return len(self.cards) == 2 and not self.aceSplit or len(self.cards) == 1 and self.aceSplit
 
+    # Checks if the hand can be split
     def splittable(self) -> bool:
         return len(self.cards) == 2 and self.cards[0] == self.cards[1] and not self.splitted
-
-
-    def __str__(self):
-        ret = ""
-        for card in self.cards:
-            ret += f"{card}, "
-        return ret

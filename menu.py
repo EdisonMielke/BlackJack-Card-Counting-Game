@@ -5,6 +5,7 @@ Author: Connor Finch
 from game import Game
 from deck import Deck
 from minigame import Minigame
+from const import HILOW_VALUES
 from os import system, name
 
 
@@ -12,7 +13,11 @@ class Menu:
     def __init__(self) -> None:
         self.playing = True
         self.globalBalance = 1000
+        self.number_of_decks = 4
+        self.card_counting_method = HILOW_VALUES
 
+
+    # This function is used to retrieve whether the user wishes to play again. 
     def again(self) -> bool:
         while True:
             user_input = input("Play Again? Y/N\n").lower()
@@ -23,14 +28,29 @@ class Menu:
             else:
                 print("Not a valid option.")
 
+    # This function is used to change the number of decks to be used in both the Blackjack Game and Minigame.
+    def change_shoe_size(self):
+        while True:
+            try:
+                num = int(input("Enter the amount of decks to be used while playing blackjack: "))
+                if 0 < num <= 10:
+                    self.number_of_decks = num
+                    break
+                else:
+                    print("A valid number of decks must be in the range from 1 to 10 (Inclusive).")
+            except ValueError:
+                print("Invalid input.")
+
+
+    # This function provides the interface and logic of the main menu screen.
     def home(self) -> str:
         while self.playing:
             self.welcome_message()
-            user_input = input("[1]: Blackjack\n[2]: Basic Strategy Practice\n[3]: Exit Application\n")
+            user_input = input("[1]: Blackjack\n[2]: Basic Strategy Practice\n[3]: Change Number of Decks\n[4]: Exit Application\n")
 
             if "1" == user_input:
                 flag = True
-                g = Game(self.globalBalance)
+                g = Game(self.globalBalance, self.number_of_decks)
 
                 while flag:
                     system("cls" if name == "nt" else "clear")
@@ -38,7 +58,8 @@ class Menu:
                     self.globalBalance = g.player.betting.balance
                     if g.deck.reshuffle():
                         print("Running low on cards... Reshuffling")
-                        g.deck = Deck(4)
+                        input("Press ENTER to continue...\n")
+                        g.deck = Deck(self.number_of_decks)
                     if g.player.betting.balance > 0:
                         flag = self.again()
                     else:
@@ -50,19 +71,22 @@ class Menu:
                     system("cls" if name == "nt" else "clear")
 
             elif "2" == user_input:
-                m = Minigame()
+                m = Minigame(self.number_of_decks)
                 system("cls" if name == "nt" else "clear")
                 m.playGame()
                 self.globalBalance += m.balance
 
             elif "3" == user_input:
+                self.change_shoe_size()
+            elif "4" == user_input:
                 self.playing = False
 
             else:
-                input("Not a valid option. Choose from options 1, 2, or 3.\nPress ENTER to continue...\n")
+                input("Not a valid option. Choose from options 1, 2, 3, or 4.\nPress ENTER to continue...\n")
             
             system("cls" if name == "nt" else "clear")
 
+    # This function simply prints out "Welcome to the Advanced Blackjack System" whenever the user accesses the main menu.
     def welcome_message(self):
         print("""
             __        __   _                            _          _   _               _       _                               _   ____  _            _     _            _      ____            _                 

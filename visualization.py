@@ -11,6 +11,7 @@ class Display:
     def __init__(self) -> None:
         pass
 
+    # Prints the card in a visual format to the screen. 
     def showCard(self, card: Card) -> str:
         upperSuit = f"|{VSUITS[card.suit]}".ljust(9) + "|"
         lowerSuit = "|" + f"{VSUITS[card.suit]}|".rjust(9)
@@ -25,6 +26,7 @@ class Display:
         for line in vCard:
             print(line)
 
+    # Prints every cards in the hand to the screen.
     def showHand(self, hand: Hand, participant_name: str) -> str:
         vCard = ["", "", "", "", "", "", ""]
 
