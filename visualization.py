@@ -1,12 +1,15 @@
+"""
+Author: Connor Finch
+"""
+
 from const import VSUITS
 from card import Card
 from hand import Hand
 
+
 class Display:
     def __init__(self) -> None:
         pass
-
-
 
     def showCard(self, card: Card) -> str:
         upperSuit = f"|{VSUITS[card.suit]}".ljust(9) + "|"
@@ -25,7 +28,6 @@ class Display:
     def showHand(self, hand: Hand, participant_name: str) -> str:
         vCard = ["", "", "", "", "", "", ""]
 
-        #TODO: move this print line somewhere else because we want to reuse it for minigame.py
         print(f"{participant_name}'s Hand Value: {hand.getValue()}")
         for card in hand.cards:
             vCard[0] += f"----------\t"

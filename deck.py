@@ -1,3 +1,7 @@
+"""
+Author: Connor Finch
+"""
+
 import random
 from const import RANKS, SUITS, HILOW_VALUES
 from card_count import CardCount
@@ -21,17 +25,13 @@ class Deck:
         random.shuffle(self.deck)
 
     def deal(self) -> Card:
-        # update card count class with data. Move card count updates to different class?
         card = self.deck.pop()
         self.count.runningCount(card)
-        #number_of_cards = len(self.deck)
 
-        #dSize = 1 if number_of_cards < 52 else number_of_cards/52
         dSize = 1 if self.number_of_decks == 1 else len(self.deck)/52
         self.count.trueCount(dSize)
         return card
 
     def reshuffle(self) -> bool:
         # Reshuffle when deck is 25% left... 75% gone
-        #return len(self.deck) < 52*self.number_of_decks/2
         return len(self.deck)/(52*self.number_of_decks) < 0.25

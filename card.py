@@ -1,7 +1,12 @@
+"""
+Author: Connor Finch
+"""
+
 from const import BJ_VALUES
 
+
 class Card:
-    def __init__(self, rank, suit) -> None:
+    def __init__(self, rank: str, suit: str):
         self.rank = rank
         self.suit = suit
         self.value = BJ_VALUES[rank]

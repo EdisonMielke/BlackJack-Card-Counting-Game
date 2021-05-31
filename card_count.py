@@ -1,11 +1,13 @@
+"""
+Author: Connor Finch
+"""
+
 from card import Card
 from typing import Dict
 
 
 class CardCount:
     def __init__(self, values: Dict[str, int]) -> None:
-        #self.rCount = 0
-        #self.tCount = 0
         self.rCount = self.tCount = 0
         self.values = values
 
@@ -15,9 +17,8 @@ class CardCount:
     def trueCount(self, deckSize: int):
         self.tCount = self.rCount/deckSize
 
-    # TODO: make better displayInfo messages
     def displayInfo(self):
         if self.tCount < 0:
-            print(f"There will be about {round(-self.tCount, 2)} more low cards for every high card in the deck")
+            print(f"There's about {round(-self.tCount, 2)} more low cards for every high card in the deck.")
         else:
-            print(f"There will be about {round(self.tCount, 2)} more high cards for every low card in the deck")
+            print(f"There's about {round(self.tCount, 2)} more high cards for every low card in the deck.")

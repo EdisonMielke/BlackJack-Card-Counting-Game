@@ -1,3 +1,7 @@
+"""
+Author: Connor Finch
+"""
+
 from deck import Deck
 from hand import Hand
 from participant import Player, Dealer
@@ -11,63 +15,67 @@ class Game:
         self.player = Player(player_balance)
         self.dealer = Dealer()
         self.display = Display()
+        self.handsplayed = 0
 
     def playGame(self):
         print(f"Player's Balance: ${self.player.betting.balance}")
         if self.player.betting.balance <= 0:
-            input("Insufficent Funds... Waiting for player input before exiting to main menu...\n")
+            input("Insufficent Funds!\nPress ENTER to exit to the main menu...\n")
             return 
         self.player.betting.getBet()
 
         
 
-        #self.player.bet_size = bet
-        self.player.newHand(self.deck) # starting hand dealt to player
-        self.dealer.newHand(self.deck) # starting hand dealt to dealer
+        self.player.newHand(self.deck) 
+        self.dealer.newHand(self.deck) 
+
         print("Dealer's Upcard")
         self.player.dealers_upcard = self.dealer.hands[0].cards[0]
-        self.player.playHands(self.deck) # user's turn to play/bet all hands they have
+        self.player.playHands(self.deck)
 
         if not self.player.allBust(): 
-            self.dealer.play(self.deck) # dealer's turn to play if and only if user has not busted on all hands
+            self.dealer.play(self.deck) 
 
         self.compareHands()
 
     def compareHands(self):
         for hand in self.player.hands:
+            self.handsplayed += 1
             self.compare(hand)
+        self.handsplayed = 0
 
     def compare(self, hand: Hand):
         playerHand = hand.getValue()
         dealerHand = self.dealer.hands[0].getValue()
-        # dealerHand = "Dealer Busts!" if dealerHand > 21 else dealerHand
-        # TODO: make better interface messages... use visualazation class too
-        system("cls" if name == "nt" else "clear")
+
         self.display.showHand(self.dealer.hands[0], "Dealer")
         print()
         self.display.showHand(hand, "Player")
 
-
         if not hand.busted():
             if hand.blackjack() and not self.dealer.hands[0].blackjack():
-                print("Player Wins!")
+                print("Blackjack! The Player Wins!")
                 self.player.betting.blackjack()
             elif self.dealer.hands[0].busted() or playerHand > dealerHand:
-                print("Player Wins!")
+                print("The Player Wins!")
                 self.player.betting.won()
-                #self.player.balance += (self.player.bet_size*2)
-                # call betting module... player wins money
             elif playerHand == dealerHand:
-                print("it's a tie... PUSH")
-                # call betting module... player doesn't win or lose money
+                print("The Player and Dealer Have Tied!")
                 self.player.betting.tie()
-                #self.player.balance += self.player.bet_size
             else:
-                print("Dealer Wins!")
-                # call betting module... player loses money
+                print("The Dealer Wins!")
         else:
-            print("Dealer Wins!")
-            # call betting module... player loses money
+            print("The Dealer Wins!")
+        
+        if self.player.betting.balance == 0:
+            input("Press ENTER to continue...")
+            system("cls" if name == "nt" else "clear")
+
+        if self.handsplayed == 1 and len(self.player.hands) == 2:
+            input("Press ENTER to view your other hand.\n")
+            system("cls" if name == "nt" else "clear")
+
+
 
 
 
