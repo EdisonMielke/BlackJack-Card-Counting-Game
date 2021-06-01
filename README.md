@@ -1,9 +1,13 @@
 # Advanced Blackjack Strategy
-By:
+5-31-2021
 Yushu Chen
 Connor Finch
 Eric Hsu
 Edison Mielke
+
+## Why this was created
+This was created to optimize playing Blackjack for anyone interested in 
+learning how to gamble optimally.
 
 ## Installation Guide
 
@@ -50,3 +54,12 @@ python3.9 can be installed similarly.
 This project has NO dependencies on any sort of non-standard python package! 
 It only uses “os” and “typing”, so this is a total plug and play program, 
 have fun learning how to become a card shark!
+
+## Directories
+
+### Main Directory
+This contains all of the code that the project relies on, this is a very modular design such that each individual file 
+does as little as possible and keeps things organized
+
+### Documentation Directory
+This contains all the documentation used for programmers wishing to edit the code involved or users wishing to play the game.
